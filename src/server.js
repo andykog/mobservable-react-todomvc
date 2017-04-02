@@ -5,9 +5,7 @@ import escape from 'jsesc';
 
 import { renderToString } from 'react-dom/server'
 
-import TodoStore from '../src/stores/TodoStore';
-import ViewStore from '../src/stores/ViewStore';
-import TodoApp from '../src/components/todoApp.js';
+import App from './App.js';
 import React from 'react';
 
 const app = express();
@@ -56,26 +54,11 @@ let todos = []; // Todos are stored here
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-	const todoStore = TodoStore.fromJS(todos);
-	const viewStore = new ViewStore();
-
-	const initView = renderToString((
-		<TodoApp todoStore={todoStore} viewStore={viewStore} />
-	));
+	const initView = renderToString((<App />));
 
 	const page = renderFullPage(initView);
 
 	res.status(200).send(page);
-});
-
-app.post('/api/todos', function(req, res) {
-	todos = req.body.todos;
-	if (Array.isArray(todos)) {
-		console.log(`Updated todos (${todos.length})`);
-		res.status(201).send(JSON.stringify({ success: true }));
-	} else {
-		res.status(200).send(JSON.stringify({ success: false, error: "expected `todos` to be array" }));
-	}
 });
 
 app.get('*', function(req, res) {
