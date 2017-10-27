@@ -37,6 +37,13 @@ export default class TodoItem extends React.Component {
 					onChange={this.handleChange}
 					onKeyDown={this.handleKeyDown}
 				/>
+				<button onClick={() => {
+          let i = 0;
+          let s = Date.now();
+          while(i < 3000) {
+            i++; todo.completed = !todo.completed;
+          }
+				}}>crazy</button>
 			</li>
 		);
 	}

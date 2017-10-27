@@ -1,4 +1,4 @@
-import {observable, computed, reaction} from 'mobx';
+import {observable, computed, reaction, action} from 'mobx';
 import TodoModel from '../models/TodoModel'
 import * as Utils from '../utils';
 
@@ -18,14 +18,14 @@ export default class TodoStore {
 	}
 
 	subscribeServerToStore() {
-		reaction(
-			() => this.toJS(),
-			todos => window.fetch && fetch('/api/todos', {
-				method: 'post',
-				body: JSON.stringify({ todos }),
-				headers: new Headers({ 'Content-Type': 'application/json' })
-			})
-		);
+		// reaction(
+		// 	() => this.toJS(),
+		// 	todos => window.fetch && fetch('/api/todos', {
+		// 		method: 'post',
+		// 		body: JSON.stringify({ todos }),
+		// 		headers: new Headers({ 'Content-Type': 'application/json' })
+		// 	})
+		// );
 	}
 
 	subscribeLocalstorageToStore() {
@@ -35,6 +35,7 @@ export default class TodoStore {
 		);
 	}
 
+	@action
 	addTodo (title) {
 		this.todos.push(new TodoModel(this, Utils.uuid(), title, false));
 	}
